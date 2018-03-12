@@ -1,0 +1,45 @@
+#-------------------------------------
+# Configuration for Nginx Listen Port 
+#-------------------------------------
+
+
+#server block for listen on port 80
+
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
+        index index.html index.htm;
+        server_name 54.245.40.237;
+
+# redirection to https when client enters http
+
+	return 301 https://$server_name$request_uri;
+ 	location / {
+		proxy_pass http://127.0.0.1:8000;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+	}
+
+}
+
+#server block for HTTPS listening 
+server{
+        
+        listen 443 ssl;
+
+        
+        index index.html index.htm;
+#ssl certificate and key attached through the path given below
+        server_name 54.245.40.237;
+	ssl on;
+        ssl_certificate /etc/nginx/ssl/nginx.crt;
+        ssl_certificate_key /etc/nginx/ssl/nginx.key;
+	location / {
+                proxy_pass http://127.0.0.1:8000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+        }
+
+
+}
+

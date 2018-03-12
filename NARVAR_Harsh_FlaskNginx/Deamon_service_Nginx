@@ -1,0 +1,19 @@
+#------------------------------------------------------------------------
+# Deamon Service file to control auto running of all the process involved 
+# in running Flask on Nginx. There are series of commands which needs to be 
+# executed to bring the webapp live. 
+# To automate the process and control the start and stop through systemctl 
+# this daemon service is written
+#-------------------------------------------------------------------------
+
+[Unit]
+After=mysql.service
+
+[Service]
+ExecStart=/usr/local/bin/flask-script.sh
+
+[Install]
+WantedBy=default.target
+
+
+#save this file in /etc/systemd/system/ with name start-flask.service

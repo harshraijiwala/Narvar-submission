@@ -1,0 +1,14 @@
+#----------------------------------------------
+# this file has all the executing commands which are needed 
+# to be run when Flask webapp needs to go live.
+#-----------------------------------------------
+
+#location of this file : /usr/local/bin/flask-script.sh
+#which is pointed to in /etc/systemd/system/start-flask.service file
+
+#!/bin/bash
+pushd ~/my_flask_app/env
+virtualenv env
+source env/bin/activate
+gunicorn hello:app
+
