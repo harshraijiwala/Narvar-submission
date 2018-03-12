@@ -1,0 +1,6 @@
+This section has two monitoring scripts written in Bash. 
+Both are written as per the RHEL 7 linux distribution.
+
+Scripts will perform Monitoring task as per the name of the script and 
+will send email alert notification when the monitored parameter is/are above the
+threshod value. 
