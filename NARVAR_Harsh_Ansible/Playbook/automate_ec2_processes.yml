@@ -1,0 +1,77 @@
+
+--- # Ansible Playbook to install Nginx on EC2 instance, add monitoring scripts, set Cron job. 
+- hosts: ec2
+  become: yes
+  tasks:
+#YUM repository module to download package
+  - name: Create a Repository on Ec2 instance for downloading Nginx 
+    yum_repository:
+      name: nginx
+      description: nginx repo
+      file: external_repos
+      baseurl: http://nginx.org/packages/mainline/rhel/7/$basearch/
+      gpgcheck: no
+#YUM module for package management 
+  - name: Yum Update to download the Nginx package
+    yum:
+      name: '*'
+      state: latest
+      exclude: kernel*
+  - name: Install Nginx from downloaded package
+    yum: 
+      name: nginx 
+      state: present 
+      update_cache: yes
+#service module to control the service on EC2 instance
+  - name: start Nginx Service 
+    service: 
+      name: nginx 
+      state: started
+#copy module to copy files from remote machine to Ec2 instance 
+  - copy:
+      src: /etc/ansible/Playbook/disk_space_monitoring.sh
+      dest: ~/disk_space_monitoring.sh
+      owner: root
+      group: root
+      mode: u=rwx,g=r,o=r
+#cron module to set cron job on EC2 intance 
+  - cron:
+      name: "monitor"
+      minute: "5"
+      job: "~/disk_space_monitoring.sh"
+  - copy:
+      src: /etc/ansible/Playbook/cpu_utilization_in_percent.sh
+      dest: ~/cpu_utilization_in_percent.sh
+      owner: root
+      group: root
+      mode: u=rwx,g=r,o=r
+  - cron:
+      name: "monitor"
+      minute: "5"
+      job: "~/cpu_utilization_in_percent.sh"
+# List module used to optimize the installation process 
+  - name: python dependencies 
+    yum:
+      name: "{{item}}"
+      state: installed 
+    with_items:
+      - gcc 
+      - openssl-devel
+      - bzip2-devel  
+# get_url module to download a file from the URL
+  - name: download python 3.6
+    get_url:
+      url: https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+      dest: /usr/src/
+      mode: 0777
+  - name: extract python 3.6
+    unarchive:
+      src: /usr/src/Python-3.6.4.tgz
+      dest: /usr/src
+      remote_src: yes
+#command module to run command on EC2 instance 
+  - name: run configure 
+    command: ./configure --enable-optimizations
+    args: 
+      chdir: /usr/src/Python-3.6.4
+      
