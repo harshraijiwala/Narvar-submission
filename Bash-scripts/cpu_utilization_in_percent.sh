@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 #*************************Script to Monitor CPU Utilization & Sending an Alert Mail******************
 #CPU Utilization is calculated asedo the load average for the fifth minute
