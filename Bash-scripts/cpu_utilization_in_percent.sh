@@ -11,7 +11,7 @@ fifth_min_load_avg="$(uptime | cut -d',' -f5)"
 #------------------------------------------------------------------------------------------------------
 #Getting the number of cpu cores from /proc/cpuinfo file
 #Diving the load average for 5th minute from the number of cpu cores to obtain the CPU utilizion percent
-cpu_cores="$(cat /proc/cpuinfo | grep -e 'cpu cores' | awk -F':' '{print $2}')"
+cpu_cores="$(cmd < /proc/cpuinfo | grep -e 'cpu cores' | awk -F':' '{print $2}')"
 
 cpu_utilization="$(echo "${fifth_min_load_avg} * 100" | bc)"
 
