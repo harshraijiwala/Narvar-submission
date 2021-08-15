@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------------------------------
-#This file allows to set all the dynamic parameters to the Variables defined in variable.tf file
+#This file allows to set all the dynamic parameters to the Variables defined in variable.tf file. 
 #---------------------------------------------------------------------------------------------------
 
 #Decalared values for profiling in AWS CLI
